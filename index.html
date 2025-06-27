@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <link rel="preload" href="logo.png" as="image">
+  
+  <title>Warkopin - Warkop Rasa Cafe</title>
+  <style>
+    /* Font & Theme */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+    
+    .search-bar {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  padding: 0.6rem 1rem;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #d3c0b0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Playfair Display', serif;
+  background-color: #fff8ef;
+  color: #3e2c1c;
+}
+    
+    .menu-item:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+    
+    #loading-logo {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #f3e9d2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+#loading-logo img {
+  width: 100px;
+  height: 100px;
+  animation: spin 2s ease-in-out forwards;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg) scale(0.8); opacity: 0; }
+  50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
+  100% { transform: rotate(360deg) scale(1); opacity: 1; }
+}
+    
+   
+    
+    .menu-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+    .menu-item {
+  background: #fff8ef;
+  border: 1px solid #d3c0b0;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.menu-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #d3c0b0;
+  margin-bottom: 0.5rem;
+}
+    
+.menu-category {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+@media (min-width: 600px) {
+  .menu-category {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+    
+    body {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background: #f3e9d2;
+      color: #3e2c1c;
+      overflow-x: hidden;
+    }
+    
+    html {
+  scroll-behavior: smooth;
+}
+
+    .menu h3 {
+  margin-top: 2rem;
+  color: #6f4e37;
+  border-bottom: 2px solid #d3c0b0;
+  padding-bottom: 5px;
+}
+.kontak {
+  padding: 2rem;
+  text-align: center;
+  background: #e9d4b5;
+}
+
+.kontak h2 {
+  margin-bottom: 1rem;
+}
+
+.sosmed {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.sosmed a:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+.sosmed a {
+  font-size: 2rem;
+  color: #3e2c1c;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.sosmed a:hover {
+  color: #6f4e37;
+  transform: scale(1.2);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.person {
+  background: #fff8ef;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.person img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #d3c0b0;
+}
+.logo img {
+  height: 50px; /* Atur tinggi sesuai kebutuhan */
+  object-fit: contain;
+}
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #6f4e37;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      background: #6f4e37;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #fdd9a0;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .show {
+      display: flex !important;
+    }
+
+    /* Hero */.hero {
+  padding: 4rem 2rem;
+  text-align: center;
+  animation: fadeIn 1.2s ease-in;
+  background-image: url('img/bg-warkopin.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  position: relative;
+}
+    .hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* gelap transparan */
+  z-index: 1;
+}
+
+.hero h1,
+.hero p {
+  position: relative;
+  z-index: 2;
+}
+
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Menu Section */
+    .menu {
+      padding: 2rem;
+      animation: slideIn 1s ease-in;
+    }
+
+    .menu h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .menu-item {
+      background: #fff8ef;
+      border: 1px solid #d3c0b0;
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .menu-item strong {
+      display: block;
+    }
+
+    /* About Section */
+    .about {
+      padding: 2rem;
+      background: #e9d4b5;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    .about h2 {
+      text-align: center;
+    }
+
+    .team {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .person {
+      background: #fff8ef;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    /* Footer */
+    footer {
+      background: #3e2c1c;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideIn {
+      from {transform: translateX(-50px); opacity: 0;}
+      to {transform: translateX(0); opacity: 1;}
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        display: flex !important;
+        position: static;
+        flex-direction: row;
+        background: none;
+        gap: 2rem;
+      }
+
+      .hamburger {
+        display: none;
+      }
+
+      .team {
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+<div id="loading-logo">
+  <img src="/img/logo.png" alt="Warkopin" />
+</div>
+
+<header>
+  <div class="logo">
+  <img src="/img/logo.png" alt="Warkopin" />
+  <span style="margin-left: 10px;">Warkopin</span>
+</div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div><nav id="navMenu">
+  <a href="#home">Beranda</a>
+  <a href="#menu">Menu</a>
+  <a href="#about">Tentang</a>
+  <a href="#kontak">Kontak</a> <!-- Tambahan ini -->
+</nav>
+
+</header>
+
+<section class="hero reveal" id="home">
+  <h1>Warkopin</h1>
+  <p><em>"Warkop rasa cafe"</em></p>
+</section>
+<section class="menu reveal" id="menu">
+  <div class="search-bar">
+  <input type="text" id="searchInput" onkeyup="cariMenu()" placeholder="Cari menu...">
+</div>
+  <h2>Menu Kami</h2>
+
+<!-- Kategori Minuman -->
+  <h3>Minuman</h3>
+  <div class="menu-category">
+    <div class="menu-item">
+      <img src="img/warkopin-coffee.jpg" alt="Warkopin Coffee">
+      <div class="menu-text">
+        <strong>Warkopin Coffee</strong>
+        <p>Kopi signature dari Warkopin dengan rasa khas dan aroma kuat.</p>
+        <p>Rp 12.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/vanilla-coffee.jpg" alt="Vanilla Coffee">
+      <div class="menu-text">
+        <strong>Vanilla Coffee</strong>
+        <p>Kopi lembut berpadu dengan aroma vanilla yang manis.</p>
+        <p>Rp 12.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/smooth-matcha-panas.jpg" alt="Smooth Matcha Panas">
+      <div class="menu-text">
+        <strong>Smooth Matcha Panas</strong>
+        <p>Teh hijau bubuk berkualitas dengan rasa halus dan menenangkan.</p>
+        <p>Rp 5.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/es-smooth-matcha.jpg" alt="Es Smooth Matcha">
+      <div class="menu-text">
+        <strong>Es Smooth Matcha</strong>
+        <p>Minuman dingin berbahan matcha, segar dan nikmat.</p>
+        <p>Rp 6.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/kopi-sachet-dingin.jpg" alt="Kopi Sachet Dingin">
+      <div class="menu-text">
+        <strong>Kopi Sachet Dingin</strong>
+        <p>Kopi instan disajikan dingin untuk kesegaran praktis.</p>
+        <p>Rp 6.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/kopi-sachet-panas.jpg" alt="Kopi Sachet Panas">
+      <div class="menu-text">
+        <strong>Kopi Sachet Panas</strong>
+        <p>Kopi sachet klasik dengan sensasi hangat dan nyaman.</p>
+        <p>Rp 5.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/teh-tawar-panas.jpg" alt="Teh Tawar Panas">
+      <div class="menu-text">
+        <strong>Teh Tawar Panas</strong>
+        <p>Teh tanpa gula, cocok untuk pecinta rasa teh asli.</p>
+        <p>Rp 3.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/es-teh-tawar.jpg" alt="Es Teh Tawar">
+      <div class="menu-text">
+        <strong>Es Teh Tawar</strong>
+        <p>Teh tawar dingin yang menyegarkan tenggorokan.</p>
+        <p>Rp 4.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/teh-manis-hangat.jpg" alt="Teh Manis Hangat">
+      <div class="menu-text">
+        <strong>Teh Manis Hangat</strong>
+        <p>Teh hangat dengan gula, cocok untuk menemani sore.</p>
+        <p>Rp 5.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/es-teh-manis.jpg" alt="Es Teh Manis">
+      <div class="menu-text">
+        <strong>Es Teh Manis</strong>
+        <p>Teh manis disajikan dingin, pas untuk cuaca panas.</p>
+        <p>Rp 6.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/teh-tarik-malay.jpg" alt="Teh Tarik Malay">
+      <div class="menu-text">
+        <strong>Teh Tarik Malay</strong>
+        <p>Minuman khas Malaysia, teh dicampur susu dengan teknik tarik.</p>
+        <p>Rp 10.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/lychee-tea.jpg" alt="Lychee Tea">
+      <div class="menu-text">
+        <strong>Lychee Tea</strong>
+        <p>Teh dengan aroma dan rasa leci yang menyegarkan.</p>
+        <p>Rp 6.000</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kategori Makanan -->
+  <h3>Makanan</h3>
+  <div class="menu-category">
+    <div class="menu-item">
+      <img src="img/nasi-goreng-k.jpg" alt="Nasi Goreng Kecap Warkopin">
+      <div class="menu-text">
+        <strong>Nasi Goreng Kecap Warkopin</strong>
+        <p>Nasi goreng manis gurih khas warkop dengan kecap spesial.</p>
+        <p>Rp 15.000</p>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="img/nasi-goreng-ning.jpg" alt="Nasi Goreng Kuning Warkopin">
+      <div class="menu-text">
+        <strong>Nasi Goreng Kuning Warkopin</strong>
+        <p>Nasi goreng rempah dengan cita rasa khas kunyit dan bawang.</p>
+        <p>Rp 15.000</p>
+      </div>
+    </div>
+          <div class="menu-item">
+    <img src="img/mie-banglades.jpg" alt="Mie Banglades Warkopin">
+    <div class="menu-text">
+      <strong>Mie Bangladesh Warkopin</strong>
+      <p>Mie dengan racikan bumbu rempah unik ala Warkopin, pedas gurih bikin nagih.</p>
+      <p>Rp 15.000</p>
+    </div>
+  </div>
+   <div class="menu-item">
+    <img src="img/bihun-goreng.jpg" alt="Bihun Goreng Warkopin">
+    <div class="menu-text">
+      <strong>Bihun Goreng Warkopin</strong>
+      <p>Bihun Goreng Warkopin
+Bihun goreng dengan topping sederhana tapi menggoda, cocok untuk sarapan ringan.</p>
+      <p>Rp 15.000</p>
+    </div>
+  </div>
+          <div class="menu-item">
+    <img src="img/indomie.jpg" alt="ie Rebus/Goreng">
+    <div class="menu-text">
+      <strong>mie Rebus/Goreng</strong>
+      <p>Pilihan mie rebus atau goreng klasik, hangat dan mengenyangkan.</p>
+      <p>Rp 7.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/indomie-telur.jpg" alt="Mie Rebus/Goreng+telur">
+    <div class="menu-text">
+      <strong>Mie Rebus/Goreng+telur</strong>
+      <p>Mie favorit ditambah telur, kombo sederhana yang memuaskan.</p>
+      <p>Rp 12.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/mie-double.jpg" alt="Mie Rebus/Goreng Double">
+    <div class="menu-text">
+      <strong>Mie Rebus/Goreng Double</strong>
+      <p>Porsi dua kali lipat untuk pecinta mie sejati.
+</p>
+      <p>Rp 12.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/double-telur.jpg" alt="Mie Rebus/Goreng Double+Telur">
+    <div class="menu-text">
+      <strong>Mie Rebus/Goreng Double+Telur</strong>
+      <p>Lebih banyak mie, lebih nikmat, dengan tambahan telur.</p>
+      <p>Rp 15.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/Spaghetti.jpg" alt="Spaghetti (Bolognese, Carbonara, Aolio Olio)">
+    <div class="menu-text">
+      <strong>Spaghettu (Bolognese, Carbonara, Aolio Olio)</strong>
+      <p>Spaghetti ala cafe dengan pilihan saus favorit: bolognese, carbonara, atau aolio olio.</p>
+      <p>Rp 12.000</p>
+    </div>
+  </div>
+          <div class="menu-item">
+    <img src="img/kentang-goreng.jpg" alt="Kentang-Goreng">
+    <div class="menu-text">
+      <strong>Kentang Goreng</strong>
+      <p>Kentang goreng renyah, cocok untuk camilan atau teman minum.</p>
+      <p>Rp 10.000</p>
+    </div>
+  </div>
+          <div class="menu-item">
+    <img src="img/sosis-bakar.jpg" alt="Sosis Bakar">
+    <div class="menu-text">
+      <strong>Sosis Bakar</strong>
+      <p>Sosis dipanggang dengan bumbu gurih, disajikan hangat.
+</p>
+      <p>Rp 10.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/sosis-jumbo.jpg" alt="Sosis Bakar Jumbo">
+    <div class="menu-text">
+      <strong>Sosis Bakar Jumbo</strong>
+      <p>Lebih besar, lebih puas! Cocok untuk perut besar.</p>
+      <p>Rp 12.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/mix.jpg" alt="Mix Platter">
+    <div class="menu-text">
+      <strong>Mix Platter</strong>
+      <p>Isi campuran kentang, sosis, dan snack lainnya. Cocok untuk sharing!</p>
+      <p>Rp 20.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/Piscok.jpg" alt="Pisang Coklat Lumer">
+    <div class="menu-text">
+      <strong>Pisang Coklat Lumer</strong>
+      <p>Pisang manis dibungkus kulit tipis dan coklat meleleh di dalamnya.</p>
+      <p>Rp 10.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/liwet-tongkol.jpg" alt="Nasi Liwet Suwir">
+    <div class="menu-text">
+      <strong>Nasi Liwet Tongkol Suwir</strong>
+      <p>Nasi liwet gurih dengan tongkol suwir pedas yang menggoda.</p>
+      <p>Rp 15.000</p>
+    </div>
+  </div>
+          <div class="menu-item">
+    <img src="img/liwet-ayam.jpg" alt="Nasi Liwet Ayam Goreng">
+    <div class="menu-text">
+      <strong>Nasi Liwet Ayam Goreng</strong>
+      <p>Nasi liwet khas Warkopin disajikan dengan ayam goreng renyah.</p>
+      <p>Rp 20.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/liwet.jpg" alt="Nasi Liwet">
+    <div class="menu-text">
+      <strong>Nasi Liwet</strong>
+      <p>Nasi liwet gurih dengan aroma santan dan daun salam, cocok dengan lauk apa saja.</p>
+      <p>Rp 10.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/Nasi.jpg" alt="Nasi">
+    <div class="menu-text">
+      <strong>Nasi</strong>
+      <p>Nasi putih pulen sebagai pelengkap menu favoritmu.</p>
+      <p>Rp 5.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/telur.jpg" alt="Telur Dadar/Mata Sapi">
+    <div class="menu-text">
+      <strong>Telur Dadar/Mata Sapi</strong>
+      <p>Telur olahan sesuai selera, bisa dadar atau mata sapi.</p>
+      <p>Rp 5.000</p>
+    </div>
+  </div>
+      <div class="menu-item">
+    <img src="img/pimie.jpg" alt="Pizza Mie">
+    <div class="menu-text">
+      <strong>Pizza Mie</strong>
+      <p>Kreasi unik mie goreng berbentuk pizza, topping menggoda dan cocok untuk anak muda.</p>
+      <p>Rp 10.000</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section class="about reveal" id="about">
+  <h2>Tentang Kami</h2>
+  <div class="team">
+    <div class="person">
+      <img src="img/founder.jpg" alt="Founder Warkopin" />
+      <div>
+        <strong>Founder: Budi Santoso</strong>
+        <p>Budi adalah penggagas utama Warkopin, mengusung konsep warkop estetik rasa cafe.</p>
+      </div>
+    </div>
+    <div class="person">
+      <img src="img/cofounder.jpg" alt="Co-Founder Warkopin" />
+      <div>
+        <strong>Co-Founder: Rina Ayu</strong>
+        <p>Rina turut membangun menu unik dan tampilan klasik yang jadi ciri khas Warkopin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="kontak reveal" id="kontak">
+  <h2>Hubungi Kami</h2>
+  <div class="sosmed">
+    <a href="https://www.instagram.com/warkopin_cilebut?igsh=MWxsem5ic2Z2d29r" target="_blank" title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://wa.me/6281400341409" target="_blank" title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://www.tiktok.com/@warkopin_cilebut?_t=ZS-8xY13QJMWGd&_r=1" target="_blank" title="TikTok">
+      <i class="fab fa-tiktok"></i>
+    </a>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 Warkopin. Semua Hak Dilindungi.
+</footer>
+<script>
+  function toggleMenu() {
+    document.getElementById('navMenu').classList.toggle('show');
+  }
+
+function cariMenu() {
+  const input = document.getElementById('searchInput').value.toLowerCase();
+  const items = document.querySelectorAll('.menu-item');
+  
+  items.forEach(item => {
+    const text = item.innerText.toLowerCase();
+    if (text.includes(input)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+  // Reveal on scroll
+  window.addEventListener("scroll", function () {
+    const reveals = document.querySelectorAll(".reveal");
+    for (let i = 0; i < reveals.length; i++) {
+      const windowHeight = window.innerHeight;
+      const elementTop = reveals[i].getBoundingClientRect().top;
+      const revealPoint = 150;
+      if (elementTop < windowHeight - revealPoint) {
+        reveals[i].classList.add("active");
+      }
+    }
+  });
+
+  // Loading logo animation
+  window.addEventListener("load", function() {
+    const loader = document.getElementById("loading-logo");
+    setTimeout(() => {
+      loader.style.opacity = "0";
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 500);
+    }, 2000);
+  });
+</script>
+
+
+</body>
+</html>
