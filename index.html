@@ -370,6 +370,54 @@
       }
     }
     
+    .slide-left {
+  animation: slideLeft 1s ease-out forwards;
+  opacity: 0;
+}
+
+.slide-right {
+  animation: slideRight 1s ease-out forwards;
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeUp 1.5s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+    
   </style>
 </head>
 <body>
@@ -396,8 +444,11 @@
 </header>
 
 <section class="hero reveal" id="home">
-  <h1>Warkopin</h1>
-  <p><em>"Warkop rasa cafe"</em></p>
+  <h1 class="slide-left">Warkopin</h1>
+  <p class="slide-right"><em>"Warkop rasa cafe"</em></p>
+  <p class="fade-in" style="margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+    Warkopin adalah tempat nongkrong dengan konsep unik yang menggabungkan suasana warung kopi tradisional dengan sentuhan estetik ala kafe. Menyediakan aneka makanan dan minuman terjangkau namun berkualitas, Warkopin hadir sebagai ruang hangat untuk ngobrol, belajar, atau bersantai.
+  </p>
 </section>
 <section class="menu reveal" id="menu">
   <div class="search-bar">
@@ -545,7 +596,7 @@ Bihun goreng dengan topping sederhana tapi menggoda, cocok untuk sarapan ringan.
           <div class="menu-item">
     <img src="img/indomie.jpg" alt="ie Rebus/Goreng">
     <div class="menu-text">
-      <strong>Mie Rebus/Goreng</strong>
+      <strong>mie Rebus/Goreng</strong>
       <p>Pilihan mie rebus atau goreng klasik, hangat dan mengenyangkan.</p>
       <p>Rp 7.000</p>
     </div>
@@ -553,7 +604,7 @@ Bihun goreng dengan topping sederhana tapi menggoda, cocok untuk sarapan ringan.
       <div class="menu-item">
     <img src="img/indomie-telur.jpg" alt="Mie Rebus/Goreng+telur">
     <div class="menu-text">
-      <strong>Mie Rebus/Goreng+Telur</strong>
+      <strong>Mie Rebus/Goreng+telur</strong>
       <p>Mie favorit ditambah telur, kombo sederhana yang memuaskan.</p>
       <p>Rp 12.000</p>
     </div>
@@ -578,7 +629,7 @@ Bihun goreng dengan topping sederhana tapi menggoda, cocok untuk sarapan ringan.
       <div class="menu-item">
     <img src="img/Spaghetti.jpg" alt="Spaghetti (Bolognese, Carbonara, Aolio Olio)">
     <div class="menu-text">
-      <strong>Spaghetti (Bolognese, Carbonara, Aolio Olio)</strong>
+      <strong>Spaghettu (Bolognese, Carbonara, Aolio Olio)</strong>
       <p>Spaghetti ala cafe dengan pilihan saus favorit: bolognese, carbonara, atau aolio olio.</p>
       <p>Rp 12.000</p>
     </div>
@@ -674,26 +725,25 @@ Bihun goreng dengan topping sederhana tapi menggoda, cocok untuk sarapan ringan.
   </div>
   </div>
 </section>
-
 <section class="about reveal" id="about">
   <h2>Tentang Kami</h2>
   <div class="team">
     <div class="person">
-      <img src="img/founder.jpg" alt="Founder Warkopin" />
       <div>
-        <strong>Founder: Budi Santoso</strong>
-        <p>Budi adalah penggagas utama Warkopin, mengusung konsep warkop estetik rasa cafe.</p>
+        <strong>Founder: Muhammad Iksan Karomi</strong>
+        <p>Iksan adalah penggagas utama Warkopin, mengusung konsep warkop estetik rasa cafe.</p>
       </div>
     </div>
     <div class="person">
-      <img src="img/cofounder.jpg" alt="Co-Founder Warkopin" />
+    
       <div>
-        <strong>Co-Founder: Rina Ayu</strong>
-        <p>Rina turut membangun menu unik dan tampilan klasik yang jadi ciri khas Warkopin.</p>
+        <strong>Co-Founder: Muhammad Iksan Karomi</strong>
+        <p>Iksan adalah rekan setia yang mendampingi sejak awal, bertanggung jawab pada branding digital dan strategi pengembangan Warkopin.</p>
       </div>
     </div>
   </div>
 </section>
+<
 <section class="kontak reveal" id="kontak">
   <h2>Hubungi Kami</h2>
   <div class="sosmed">
@@ -743,6 +793,8 @@ function cariMenu() {
       }
     }
   });
+  
+  
 
   // Loading logo animation
   window.addEventListener("load", function() {
